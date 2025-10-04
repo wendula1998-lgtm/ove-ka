@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Sep 14 2025 14:35:08 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sat Oct 04 2025 13:49:31 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="681cb9e1214c38e008a6687c" data-wf-site="681cb9e1214c38e008a66858">
 <head>
   <meta charset="utf-8">
@@ -55,7 +55,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     font-size: 2em;
     padding: 1.5rem;
     border: 0;
-    transition: all 0.5s;
+    border-radius: 12px; 
+    transition: background 0.6s, padding 0.6s, opacity 0.6s;
     width: auto;
     position: relative;
     &::after {
@@ -68,15 +69,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         right: 5%;
         bottom: 0;
         opacity: 0;
+        transition: opacity 0.6s;
     }
     &:hover {
-        background: #22363e; /* unikátní barva hero tlačítka */
-        transition: all 0.3s;
+        background: #22363e;
+        transition: background 0.3s, padding 0.3s, opacity 0.3s;
         padding: 1.5rem 3.5rem 1.5rem 1.5rem;
-        box-shadow: none; /* žádný stín */
         &::after {
             opacity: 1;
-            transition: all 0.3s;
+            transition: opacity 0.3s;
         }
     }
 }
@@ -85,7 +86,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     font-size: 2em;
     padding: 1.5rem;
     border: 0;
-    transition: all 0.5s;
+    border-radius: 12px;
+    transition: background 0.6s, padding 0.6s, opacity 0.6s; 
     width: auto;
     position: relative;
     &::after {
@@ -98,15 +100,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         right: 5%;
         bottom: 0;
         opacity: 0;
+        transition: opacity 0.6s;
     }
     &:hover {
         background: #628038; /* vlastní barva druhého tlačítka */
-        transition: all 0.3s;
-        box-shadow: 0px 6px 15px #0000ff61; /* jen druhé tlačítko má stín */
+        transition: background 0.3s, padding 0.3s, opacity 0.3s; 
+        /* box-shadow odstraněn */
         padding: 1.5rem 3.5rem 1.5rem 1.5rem;
         &::after {
             opacity: 1;
-            transition: all 0.3s;
+            transition: opacity 0.3s;
         }
     }
 }
@@ -547,7 +550,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </div>
           <div class="item-list">
             <div class="item">
-              <div id="cenik-popisek-7" data-key="sluzba7" class="item-description">Čištění vlasů + barva (Davines/Voono), střih, styling</div>
+              <div id="cenik-popisek-7" data-key="sluzba7" class="item-description">Čištění vlasů + barva (Majirel/Voono), střih, styling</div>
             </div>
             <div class="price-block">
               <div class="price-item"><span data-key="price7" class="price-dodatek-wrapper">2 800 – 3 500 Kč (3,5–4 h)</span></div>
@@ -872,7 +875,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <div class="w-layout-blockcontainer voucher-container w-container">
       <div class="voucher-wrapper">
         <h2 id="poukazy" class="voucher-heading">Obdarujte své blízké </h2>
-        <a href="#generator" class="voucher w-inline-block"><img class="voucher-img" src="images/poukaz_1.avif" alt="" sizes="(max-width: 767px) 100vw, (max-width: 991px) 95vw, 939.9768676757812px" loading="lazy" data-key="voucher" srcset="images/poukaz_1poukaz.avif 500w, images/poukaz_1poukaz.avif 800w, images/poukaz_1.avif 2089w"></a>
+        <a href="#generator" class="voucher w-inline-block"><img class="voucher-img" src="images/poukaz_1.avif" alt="" sizes="100vw" loading="lazy" data-key="voucher" srcset="images/poukaz_1poukaz.avif 500w, images/poukaz_1poukaz.avif 800w, images/poukaz_1.avif 2089w"></a>
         <div class="voucher-paragraph-wrapper">
           <h2 id="generator" class="darek-heading">Dárek,<span class="dovetek">který potěší</span></h2>
           <div class="darek-dodatek-text">Níže vyplňte e-mail a libovolnou částku, za kterou chcete poukaz pořídit. Obratem vám do e-mailu dorazí platební instrukce a po úhradě obdržíte elektronický voucher na službu dle vašeho výběru. Poukaz není nutné tisknout, stačí jej ukázat při návštěvě salónu.</div>
@@ -1010,7 +1013,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="kontakt" class="parking-section">
     <div class="w-layout-blockcontainer parking-container w-container">
       <div id="w-node-abcbba64-5631-81fb-73fd-b564ee49b76a-08a6687c" class="w-layout-layout parking-stack wf-layout-layout">
-        <div id="w-node-abcbba64-5631-81fb-73fd-b564ee49b76b-08a6687c" class="w-layout-cell parking-left-stack"><img class="parking-map" src="images/vstup_1.avif" alt="" sizes="(max-width: 767px) 100vw, (max-width: 991px) 95vw, 900.0000610351562px" loading="lazy" data-key="parking-photo" srcset="images/vstup_1vstup.avif 500w, images/vstup_1.avif 900w"></div>
+        <div id="w-node-abcbba64-5631-81fb-73fd-b564ee49b76b-08a6687c" class="w-layout-cell parking-left-stack"><img class="parking-map" src="images/vstup_1.avif" alt="" sizes="100vw" loading="lazy" data-key="parking-photo" srcset="images/vstup_1vstup.avif 500w, images/vstup_1.avif 900w"></div>
         <div class="w-layout-cell parking-right-stack">
           <div class="parking-container"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="64" height="64" fill="currentColor" app="ikonik" class="ikonik-48777">
               <path d="M11 14H12.5C14.433 14 16 12.433 16 10.5C16 8.567 14.433 7 12.5 7H9V17H11V14ZM4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM11 9H12.5C13.3284 9 14 9.67157 14 10.5C14 11.3284 13.3284 12 12.5 12H11V9Z" app="ikonik"></path>
@@ -1393,10 +1396,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div id="w-node-a3046dc5-4a6b-ee84-56f8-5aedf2eb1630-08a6687c" class="product-photo"><img src="images/davines-svg-logo_mobile.svg" loading="lazy" alt="" class="davines"></div>
       </a>
       <a href="https://www.voono.cz/" target="_blank" class="voono-link w-inline-block">
-        <div class="product-photo"><img src="images/Voono-removebg-preview.png" loading="lazy" sizes="(max-width: 767px) 100vw, 631.9444580078125px" srcset="images/Voono-removebg-preview-p-500.png 500w, images/Voono-removebg-preview.png 632w" alt="" class="voono"></div>
+        <div class="product-photo"><img src="images/Voono-removebg-preview.png" loading="lazy" sizes="100vw" srcset="images/Voono-removebg-preview-p-500.png 500w, images/Voono-removebg-preview.png 632w" alt="" class="voono"></div>
       </a>
       <a href="https://www.luxusnivlasy.cz/malibu-c/" target="_blank" class="malibu-link w-inline-block">
-        <div class="product-photo"><img src="images/malibu_c_logo-removebg-preview.png" loading="lazy" sizes="(max-width: 767px) 100vw, 659.942138671875px" srcset="images/malibu_c_logo-removebg-preview-p-500.png 500w, images/malibu_c_logo-removebg-preview.png 660w" alt="" class="malibu"></div>
+        <div class="product-photo"><img src="images/malibu_c_logo-removebg-preview.png" loading="lazy" sizes="100vw" srcset="images/malibu_c_logo-removebg-preview-p-500.png 500w, images/malibu_c_logo-removebg-preview.png 660w" alt="" class="malibu"></div>
       </a>
       <a href="https://www.hairplanet.cz/m/urban-alchemy" target="_blank" class="urban-link w-inline-block">
         <div class="product-photo"><img src="images/urban_alchemy-removebg-preview.png" loading="lazy" alt="" class="urban"></div>
