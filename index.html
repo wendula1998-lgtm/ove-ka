@@ -1649,5 +1649,186 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   })();
 </script>
+  <script>
+  (function () {
+    // Neběhej ve Webflow Designeru
+    if (window.Webflow && Webflow.env && Webflow.env('editor')) return;
+
+    var form = document.querySelector('form.custom-form');
+    if (!form) return;
+
+    var emailEl   = form.querySelector('#email');
+    var amountEl  = form.querySelector('#amount');
+    var consentEl = form.querySelector('input[name="consent"]');
+    var honeypot  = form.querySelector('input[name="website"]');
+    
+    // SEM DOPLŇ URL SVÉHO WORKERU (např. https://antispam.wendy.workers.dev/verify)
+    var WORKER_URL = 'https://TVUJ-WORKER.workers.dev/verify';
+    var SITE_KEY = '6LfIYWgsAAAAADY7-RaF0b24BNNZeABrwxSeCZ9U';
+
+    function makeOrderId() {
+      var rand = Math.floor(Math.random() * 1e6).toString().padStart(6,'0');
+      return 'VCHR-' + Date.now() + '-' + rand;
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); // Zastavíme standardní odeslání
+
+      // Honeypot kontrola (pro hloupé boty)
+      if (honeypot && honeypot.value) return;
+
+      // Základní validace
+      var amount = Number(amountEl && amountEl.value);
+      if (!emailEl || !emailEl.checkValidity() || !Number.isFinite(amount) || amount < 500 || (consentEl && !consentEl.checked)) {
+        form.reportValidity();
+        return;
+      }
+
+      // Vizuální zpětná vazba - zakážeme tlačítko
+      var submitBtn = form.querySelector('button[type="submit"]');
+      var originalText = submitBtn.innerText;
+      submitBtn.innerText = 'Ověřování...';
+      submitBtn.disabled = true;
+
+      // 1. Spustíme reCAPTCHA v3
+      grecaptcha.ready(function() {
+        grecaptcha.execute(SITE_KEY, {action: 'submit'}).then(function(token) {
+          
+          // 2. Pošleme token k ověření do tvého Cloudflare Workeru
+          fetch(WORKER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token })
+          })
+          .then(response => {
+            if (!response.ok) throw new Error('Spam check failed');
+            return response.json();
+          })
+          .then(result => {
+            if (result.ok) {
+              // 3. Pokud Worker schválil skóre, připravíme objednávku
+              var order = {
+                order_id: makeOrderId(),
+                amount: Math.round(amount * 100) / 100,
+                currency: 'CZK',
+                email: emailEl.value,
+                ts: Date.now(),
+                sent: true
+              };
+
+              try { sessionStorage.setItem('voucherOrder', JSON.stringify(order)); } catch (_) {}
+
+              // 4. Odeslání dat na Make.com (původní action formuláře)
+              var fd = new FormData(form);
+              fd.append('order_id', order.order_id);
+              fd.append('spam_score', result.score);
+
+              return fetch(form.action, { method: 'POST', body: fd });
+            } else {
+              throw new Error('Low spam score');
+            }
+          })
+          .then(() => {
+            // 5. Přesměrování na děkovací stránku
+            window.location.assign('https://oveckawendy.cz/potvrzeni-objednavky');
+          })
+          .catch(err => {
+            console.error('Antispam chyba:', err);
+            alert('Omlouváme se, vaše odeslání bylo vyhodnoceno jako podezřelé. Zkuste to prosím znovu nebo nás kontaktujte.');
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+          });
+        });
+      });
+    }, { passive: false });
+  })();
+  </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn     = document.querySelector('.buttonarrow.poptavka');
+    const sliders = document.querySelectorAll('.bas-wrapper.third, .bas-wrapper.fourth');
+    const clients = document.querySelectorAll('.client-wrapper.third, .client-wrapper.fourth');
+    if (!btn) return;
+    sliders.forEach(el => el.style.display = 'none');
+    clients.forEach(el => el.style.display = 'none');
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      sliders.forEach(el => el.style.display = 'flex');
+      clients.forEach(el => el.style.display = 'flex');
+      window.dispatchEvent(new Event('resize'));
+      btn.style.display = 'none';
+    });
+  });
+  </script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const returnContainer = document.querySelector('.return-container');
+    const toggleReturnArrow = () => {
+      const scrollableHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollPosition = window.scrollY;
+      if (scrollableHeight > 0) {
+        const scrollPercentage = (scrollPosition / scrollableHeight) * 100;
+        if (scrollPercentage >= 20) {
+          returnContainer.classList.add('visible');
+        } else {
+          returnContainer.classList.remove('visible');
+        }
+      }
+    };
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    if (returnContainer) {
+      window.addEventListener('scroll', toggleReturnArrow);
+      returnContainer.addEventListener('click', scrollToTop);
+    }
+  });
+  </script>
+
+  <script>
+  $(document).ready(() => {
+    let isMenuAlreadyOpen = false;
+    const menuBtn = $('.menu-button');
+    const blurTarget = $('.hero-split.right');
+    function toggleBlur(enable) {
+      blurTarget.css('filter', enable ? 'blur(4px)' : 'none');
+    }
+    menuBtn.on('click', () => {
+      isMenuAlreadyOpen = !isMenuAlreadyOpen;
+      $('body').css("overflow", isMenuAlreadyOpen ? "hidden" : "auto");
+      toggleBlur(isMenuAlreadyOpen);
+    });
+    $('.w-nav-menu a').on('click', () => {
+      if (isMenuAlreadyOpen) {
+        menuBtn.trigger('click');
+        setTimeout(() => {
+          $('body').css("overflow", "auto");
+          toggleBlur(false);
+          isMenuAlreadyOpen = false;
+        }, 300);
+      }
+    });
+  });
+  </script>
+  <script>
+  (function () {
+    const form = document.querySelector('.custom-form');
+    const amount = document.getElementById('amount');
+    const MIN = 500;
+    function normalize(val) { return (val + '').replace(/[^\d]/g, ''); }
+    function validate() {
+      const raw = amount.value;
+      const cleaned = normalize(raw);
+      if (raw !== cleaned) { amount.value = cleaned; }
+      const num = cleaned ? parseInt(cleaned, 10) : NaN;
+      if (!cleaned) { amount.setCustomValidity('Zadejte částku v Kč.'); }
+      else if (num < MIN) { amount.setCustomValidity('Minimální částka je 500 Kč.'); }
+      else { amount.setCustomValidity(''); }
+    }
+    amount.addEventListener('input', validate);
+    amount.addEventListener('blur', validate);
+  })();
+  </script>
 </body>
 </html>
