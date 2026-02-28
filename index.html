@@ -19,7 +19,7 @@
   <link href="css/ovecka-wendy.webflow.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
-  <script src="https://www.google.com/recaptcha/api.js?render=6LfIYWgsAAAAADY7-RaF0b24BNNZeABrwxSeCZ9U"></script>
+  <script src="https://www.google.com/recaptcha/enterprise.js?render=6LdCYWgsAAAAANxZFtsZkZgNnqZW4R3p8MCSIe3q"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
   <script type="text/javascript">WebFont.load({  google: {    families: ["PT Serif:400,400italic,700,700italic","Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic","Lora:regular,500,600,700","Playfair Display:regular,500,600,700,800"]  }});</script>
   <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
@@ -1473,51 +1473,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <script src="js/webflow.js" type="text/javascript"></script><!--  Google Tag Manager (noscript)  -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7646WGW" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!--  End Google Tag Manager (noscript)  -->
-  <!--  purchase script starts -->
-  <script>
-(function () {
-  // Neběhej ve Webflow Designeru
-  if (window.Webflow && Webflow.env && Webflow.env('editor')) return;
-  var form = document.querySelector('form.custom-form');
-  if (!form) return;
-  var emailEl   = form.querySelector('#email');
-  var amountEl  = form.querySelector('#amount');
-  var consentEl = form.querySelector('input[name="consent"]');
-  var honeypot  = form.querySelector('input[name="website"]');
-  function makeOrderId() {
-    var rand = Math.floor(Math.random() * 1e6).toString().padStart(6,'0');
-    return 'VCHR-' + Date.now() + '-' + rand;
-  }
-  form.addEventListener('submit', function (e) {
-    // Honeypot → nic neměníme (nech standardní chování)
-    if (honeypot && honeypot.value) return;
-    // Nech HTML5/Webflow validaci (žádné vizuální zásahy)
-    var amount = Number(amountEl && amountEl.value);
-    if (!emailEl || !emailEl.checkValidity() || !Number.isFinite(amount) || amount < 500 || (consentEl && !consentEl.checked)) {
-      return;
-    }
-    // Zastavíme defaultní submit a provedeme vlastní POST + redirect
-    e.preventDefault();
-    var order = {
-      order_id: makeOrderId(),
-      amount: Math.round(amount * 100) / 100,
-      currency: 'CZK',
-      email: (emailEl && emailEl.value) || '',
-      ts: Date.now(),
-      sent: false
-    };
-    try { sessionStorage.setItem('voucherOrder', JSON.stringify(order)); } catch (_) {}
-    // VOLITELNĚ: zachovej odeslání na původní action (Make/Webflow) přes fetch
-    // Pokud odesílání nechceš, celý tento blok smaž.
-    var fd = new FormData(form);
-    fd.append('order_id', order.order_id);
-    fetch(form.action, { method: 'POST', body: fd }).catch(function(){});
-    // Přesměruj na pevnou děkovku (bez parametrů v URL)
-    window.location.assign('https://oveckawendy.cz/potvrzeni-objednavky');
-  }, { passive: false });
-})();
-</script>
-  <!--  purchase script ends -->
+  
   <script>
   document.addEventListener('DOMContentLoaded', () => {
     const btn     = document.querySelector('.buttonarrow.poptavka');
@@ -1663,8 +1619,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var honeypot  = form.querySelector('input[name="website"]');
     
     // SEM DOPLŇ URL SVÉHO WORKERU (např. https://antispam.wendy.workers.dev/verify)
-    var WORKER_URL = 'https://TVUJ-WORKER.workers.dev/verify';
-    var SITE_KEY = '6LfIYWgsAAAAADY7-RaF0b24BNNZeABrwxSeCZ9U';
+    var WORKER_URL = 'https://antispam-api.wendula1998.workers.dev/verify';
+    var SITE_KEY = '6LdCYWgsAAAAANxZFtsZkZgNnqZW4R3p8MCSIe3q';
 
     function makeOrderId() {
       var rand = Math.floor(Math.random() * 1e6).toString().padStart(6,'0');
