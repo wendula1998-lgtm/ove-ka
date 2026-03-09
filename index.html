@@ -879,22 +879,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <a href="#generator" class="voucher w-inline-block"><img class="voucher-img" src="images/poukaz_1.avif" alt="" sizes="100vw" loading="lazy" data-key="voucher" srcset="images/poukaz_1poukaz.avif 500w, images/poukaz_1poukaz.avif 800w, images/poukaz_1.avif 2089w"></a>
         <div class="voucher-paragraph-wrapper">
           <h2 id="generator" class="darek-heading">Dárek,<span class="dovetek">který potěší</span></h2>
-          <div class="darek-dodatek-text">Níže vyplňte e-mail a libovolnou částku, za kterou chcete poukaz pořídit. Obratem vám do e-mailu dorazí platební instrukce a po úhradě obdržíte elektronický voucher na službu dle vašeho výběru. Poukaz není nutné tisknout, stačí jej ukázat při návštěvě salónu.</div>
-          <div class="poukaz-code w-embed">
-            <form action="https://hook.eu2.make.com/7akja95b9rcp90pxgxmimpxhrhfba3mj" method="POST" accept-charset="UTF-8" class="custom-form">
-              <label for="email">Váš e-mail</label>
-              <input id="email" type="email" name="customer_email" required="">
-              <label for="amount">Částka v Kč</label>
-              <input id="amount" type="number" name="amount_requested" min="500" step="1" required="" inputmode="numeric">
-              <!--  honeypot proti botům  -->
-              <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
-              <label>
-                <input type="checkbox" name="consent" value="yes" required="">
-                Souhlasím se zpracováním údajů
-              </label>
-              <button type="submit">Objednat poukaz</button>
-            </form>
-          </div>
+          <div class="darek-dodatek-text">
+  Níže vyplňte e-mail a částku voucheru v minimální hodnotě 500 Kč. Částku lze zadat po 5 Kč, například 500, 505, 1050 nebo 2500. Obratem vám do e-mailu dorazí platební instrukce a po úhradě obdržíte elektronický voucher na službu dle vašeho výběru. Poukaz není nutné tisknout, stačí jej ukázat při návštěvě salónu.
+</div>
+
+<div class="poukaz-code w-embed">
+  <form action="https://hook.eu2.make.com/7akja95b9rcp90pxgxmimpxhrhfba3mj" method="POST" accept-charset="UTF-8" class="custom-form">
+    <label for="email">Váš e-mail</label>
+    <input id="email" type="email" name="customer_email" required>
+
+    <label for="amount">Částka v Kč</label>
+    <input
+      id="amount"
+      type="number"
+      name="amount_requested"
+      min="500"
+      step="5"
+      required
+      inputmode="numeric"
+      placeholder="Např. 500, 505, 1050 nebo 2500"
+    >
+
+    <!-- honeypot proti botům -->
+    <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+
+    <label>
+      <input type="checkbox" name="consent" value="yes" required>
+      Souhlasím se zpracováním údajů
+    </label>
+
+    <button type="submit">Objednat poukaz</button>
+  </form>
+</div>
         </div>
       </div>
     </div>
