@@ -897,7 +897,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       step="5"
       required
       inputmode="numeric"
-      placeholder="Např. 500, 505, 1050 nebo 2500"
+      placeholder="Např. 1 000 Kč"
     >
 
     <!-- honeypot proti botům -->
@@ -1624,7 +1624,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return false;
       }
       if (num % 5 !== 0) {
-        amountEl.setCustomValidity('Zadejte částku po 5 Kč, například 500, 505 nebo 1050.');
+        amountEl.setCustomValidity('Zadejte částku dělitelnou 5, například 1 000 Kč.');
         return false;
       }
 
