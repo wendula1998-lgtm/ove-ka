@@ -1584,6 +1584,50 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('.custom-form');
     const amount = document.getElementById('amount');
     const MIN = 500;
+    const STEP = 5;
+
+    if (!form || !amount) return;
+
+    function normalize(val) {
+      return (val + '').replace(/[^\d]/g, '');
+    }
+
+    function validate() {
+      const raw = amount.value;
+      const cleaned = normalize(raw);
+
+      if (raw !== cleaned) {
+        amount.value = cleaned;
+      }
+
+      const num = cleaned ? parseInt(cleaned, 10) : NaN;
+
+      if (!cleaned) {
+        amount.setCustomValidity('Zadejte částku v Kč.');
+      } else if (Number.isNaN(num)) {
+        amount.setCustomValidity('Zadejte pouze čísla.');
+      } else if (num < MIN) {
+        amount.setCustomValidity('Minimální částka je 500 Kč.');
+      } else if (num % STEP !== 0) {
+        amount.setCustomValidity('Zadejte částku po 5 Kč, například 500, 505 nebo 1050.');
+      } else {
+        amount.setCustomValidity('');
+      }
+    }
+
+    amount.addEventListener('input', validate);
+    amount.addEventListener('blur', validate);
+
+    form.addEventListener('submit', function (e) {
+      validate();
+      if (!amount.checkValidity()) {
+        e.preventDefault();
+        amount.reportValidity();
+        amount.focus();
+      }
+    });
+  })();
+</script>
     // Helper: očistí vstup na čísla, odstraní mezery apod.
     function normalize(val) {
       // Povolit jen číslice, tečky/čárky ignorovat (nepovolujeme desetinné)
@@ -1650,11 +1694,106 @@ document.addEventListener('DOMContentLoaded', function() {
       if (honeypot && honeypot.value) return;
 
       // Základní validace
+      <script>
+  (function () {
+    if (window.Webflow && Webflow.env && Webflow.env('editor')) return;
+
+    var form = document.querySelector('form.custom-form');
+    if (!form) return;
+
+    var emailEl   = form.querySelector('#email');
+    var amountEl  = form.querySelector('#amount');
+    var consentEl = form.querySelector('input[name="consent"]');
+    var honeypot  = form.querySelector('input[name="website"]');
+    
+    var WORKER_URL = 'https://antispam-api.wendula1998.workers.dev/verify';
+    var SITE_KEY = '6LfIYWgsAAAAADY7-RaF0b24BNNZeABrwxSeCZ9U';
+
+    function makeOrderId() {
+      var rand = Math.floor(Math.random() * 1e6).toString().padStart(6,'0');
+      return 'VCHR-' + Date.now() + '-' + rand;
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (honeypot && honeypot.value) return;
+
       var amount = Number(amountEl && amountEl.value);
-      if (!emailEl || !emailEl.checkValidity() || !Number.isFinite(amount) || amount < 500 || (consentEl && !consentEl.checked)) {
+      if (
+        !emailEl ||
+        !emailEl.checkValidity() ||
+        !Number.isFinite(amount) ||
+        !Number.isInteger(amount) ||
+        amount < 500 ||
+        amount % 5 !== 0 ||
+        (consentEl && !consentEl.checked)
+      ) {
         form.reportValidity();
         return;
       }
+
+      var submitBtn = form.querySelector('button[type="submit"]');
+      var originalText = submitBtn.innerText;
+      submitBtn.innerText = 'Ověřování...';
+      submitBtn.disabled = true;
+
+      grecaptcha.enterprise.ready(function() {
+        grecaptcha.enterprise.execute(SITE_KEY, {action: 'submit'}).then(function(token) {
+          fetch(WORKER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token })
+          })
+          .then(function(response) {
+            if (!response.ok) throw new Error('Spam check failed');
+            return response.json();
+          })
+          .then(function(result) {
+            if (result.ok) {
+              var order = {
+                order_id: makeOrderId(),
+                amount: amount,
+                currency: 'CZK',
+                email: emailEl.value,
+                ts: Date.now(),
+                sent: true
+              };
+
+              try { sessionStorage.setItem('voucherOrder', JSON.stringify(order)); } catch (_) {}
+
+              var fd = new FormData(form);
+              fd.append('order_id', order.order_id);
+              fd.append('spam_score', result.score);
+
+              var sent = false;
+              try {
+                if (navigator.sendBeacon) {
+                  sent = navigator.sendBeacon(form.action, fd);
+                }
+              } catch (_) {}
+
+              if (!sent) {
+                fetch(form.action, { method: 'POST', body: fd, mode: 'no-cors', keepalive: true }).catch(function(){});
+              }
+
+              window.location.assign('https://oveckawendy.cz/potvrzeni-objednavky');
+
+            } else {
+              throw new Error(result.error || 'Antispam check rejected');
+            }
+          })
+          .catch(function(err) {
+            console.error('Antispam chyba:', err);
+            alert('Odeslání se nepodařilo. Zkontrolujte prosím e-mail a částku voucheru.');
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+          });
+        });
+      });
+    }, { passive: false });
+  })();
+</script>
 
       // Vizuální zpětná vazba - zakážeme tlačítko
       var submitBtn = form.querySelector('button[type="submit"]');
